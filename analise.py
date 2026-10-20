@@ -96,56 +96,53 @@ def extrair_indicadores_fundamentalistas(ticker_simbolo: str):
         else:
             dy_formatado = "N/D"
 
+    # Seleção exclusiva dos 6 indicadores fundamentais essenciais com resumo conciso em PT-BR
+    indicadores_essenciais = [
+        {
+            "sigla": "P/L",
+            "nome": "Preço sobre Lucro",
+            "valor": num(info.get("trailingPE")),
+            "resumo": "Anos para reaver o valor investido através dos lucros da empresa."
+        },
+        {
+            "sigla": "P/VP",
+            "nome": "Preço s/ Valor Patrimonial",
+            "valor": num(info.get("priceToBook")),
+            "resumo": "Preço da ação comparado ao seu patrimônio líquido contábil."
+        },
+        {
+            "sigla": "DY",
+            "nome": "Dividend Yield",
+            "valor": dy_formatado,
+            "resumo": "Rendimento percentual pago em dividendos nos últimos 12 meses."
+        },
+        {
+            "sigla": "ROE",
+            "nome": "Retorno s/ Patrimônio",
+            "valor": pct(info.get("returnOnEquity")),
+            "resumo": "Capacidade da empresa de gerar lucro com o dinheiro dos acionistas."
+        },
+        {
+            "sigla": "Margem Líq.",
+            "nome": "Margem Líquida",
+            "valor": pct(info.get("profitMargins")),
+            "resumo": "Porcentagem de lucro líquido que sobra a cada R$ 100 de receita."
+        },
+        {
+            "sigla": "Dívida/PL",
+            "nome": "Dívida s/ Patrimônio",
+            "valor": d_pl_formatado,
+            "resumo": "Nível de endividamento da empresa sobre seus recursos próprios."
+        }
+    ]
+
     return {
         "disponivel": True,
         "tipo": quote_type,
         "nome": info.get("longName") or info.get("shortName") or ticker_simbolo,
         "setor": setor_formatado,
-        "industria": info.get("industry", "N/D"),
         "valor_mercado": formatar_valor_grande(info.get("marketCap"), moeda_simbolo),
-        "grupos": [
-            {
-                "titulo": "Valuation (Precificação)",
-                "icone": "📊",
-                "descricao": "Métricas que comparam a cotação de mercado com os lucros e o patrimônio contábil da companhia.",
-                "indicadores": [
-                    {"sigla": "P/L", "nome": "Preço sobre Lucro", "valor": num(info.get("trailingPE")), "desc": "Tempo estimado (em anos) para o investidor reaver o capital investido através dos lucros líquidos atuais da empresa."},
-                    {"sigla": "P/VP", "nome": "Preço s/ Valor Patrimonial", "valor": num(info.get("priceToBook")), "desc": "Relação entre o valor de mercado e o patrimônio líquido. Valores abaixo de 1,00 sugerem que o ativo negocia com desconto sobre seus ativos líquidos."},
-                    {"sigla": "EV/EBITDA", "nome": "Enterprise Value / EBITDA", "valor": num(info.get("enterpriseToEbitda")), "desc": "Avalia o valor total da firma (capitalização + dívida líquida) em relação à sua geração de caixa operacional bruto."},
-                    {"sigla": "LPA", "nome": "Lucro por Ação", "valor": moeda(info.get("trailingEps"), moeda_simbolo), "desc": "Parcela do lucro líquido dos últimos 12 meses pertencente a cada ação emitida."},
-                    {"sigla": "VPA", "nome": "Valor Patrimonial por Ação", "valor": moeda(info.get("bookValue"), moeda_simbolo), "desc": "Patrimônio líquido contábil da empresa dividido pela quantidade total de ações em circulação."}
-                ]
-            },
-            {
-                "titulo": "Rentabilidade & Eficiência",
-                "icone": "🚀",
-                "descricao": "Indicadores que avaliam a eficácia da diretoria em rentabilizar o capital dos acionistas e seus ativos.",
-                "indicadores": [
-                    {"sigla": "ROE", "nome": "Retorno sobre Patrimônio Líquido", "valor": pct(info.get("returnOnEquity")), "desc": "Mede o retorno percentual gerado sobre os recursos próprios dos acionistas (um dos principais parâmetros de Graham e Buffett)."},
-                    {"sigla": "ROA", "nome": "Retorno sobre Ativos", "valor": pct(info.get("returnOnAssets") or info.get("ROA")), "desc": "Indica quão produtivos e rentáveis são todos os ativos totais da empresa na geração de lucro líquido."},
-                    {"sigla": "Margem Líquida", "nome": "Margem Líquida", "valor": pct(info.get("profitMargins")), "desc": "Percentual da receita total de vendas que se transforma efetivamente em lucro líquido após custos, despesas financeiras e impostos."},
-                    {"sigla": "Margem Operacional", "nome": "Margem Operacional (EBIT)", "valor": pct(info.get("operatingMargins")), "desc": "Mede a eficiência operacional pura do negócio antes dos encargos da dívida e tributação."}
-                ]
-            },
-            {
-                "titulo": "Endividamento & Liquidez",
-                "icone": "🛡️",
-                "descricao": "Métricas de solvência e saúde financeira no curto e longo prazo.",
-                "indicadores": [
-                    {"sigla": "Liquidez Corrente", "nome": "Liquidez Corrente", "valor": num(info.get("currentRatio")), "desc": "Capacidade da empresa de honrar seus compromissos imediatos de curto prazo (índice > 1,00 demonstra margem de segurança no capital de giro)."},
-                    {"sigla": "Dívida / PL", "nome": "Dívida sobre Patrimônio", "valor": d_pl_formatado, "desc": "Grau de endividamento da companhia em relação ao seu patrimônio líquido. Quanto maior, mais alavancada financeiramente."}
-                ]
-            },
-            {
-                "titulo": "Proventos & Dividendos",
-                "icone": "💰",
-                "descricao": "Distribuição de lucros aos acionistas na forma de dividendos e JCP.",
-                "indicadores": [
-                    {"sigla": "Dividend Yield", "nome": "Dividend Yield (12m)", "valor": dy_formatado, "desc": "Rendimento percentual distribuído em proventos aos acionistas ao longo dos últimos 12 meses em relação à cotação atual."},
-                    {"sigla": "Proventos / Ação", "nome": "Proventos por Ação (12m)", "valor": moeda(info.get("trailingAnnualDividendRate"), moeda_simbolo), "desc": "Valor nominal em dinheiro distribuído por ação ordinária/preferencial ao acionista no último ano."}
-                ]
-            }
-        ]
+        "indicadores": indicadores_essenciais
     }
 
 

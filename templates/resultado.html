@@ -148,20 +148,20 @@
             margin-bottom: 25px;
         }
 
-        /* Estilos do Módulo Fundamentalista */
+        /* Estilos do Raio-X Fundamentalista Essencial */
         .company-profile {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: #ffffff;
-            padding: 22px;
+            padding: 18px 22px;
             border-radius: 8px;
             margin-top: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
         }
         .company-name {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
-            margin: 0 0 12px 0;
+            margin: 0 0 10px 0;
             color: #ffffff;
         }
         .company-badges {
@@ -172,7 +172,7 @@
         .badge {
             display: inline-flex;
             align-items: center;
-            padding: 6px 12px;
+            padding: 5px 12px;
             border-radius: 9999px;
             font-size: 13px;
             font-weight: 500;
@@ -182,120 +182,77 @@
             color: #0f172a;
             font-weight: 600;
         }
-        .badge-industry {
-            background-color: #334155;
-            color: #f1f5f9;
-            border: 1px solid #475569;
-        }
         .badge-cap {
             background-color: #10b981;
             color: #ffffff;
             font-weight: 600;
         }
-        .fundamental-grid {
+        .essenciais-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+            margin-bottom: 25px;
         }
-        .fundamental-card {
+        .essencial-card {
             background-color: #ffffff;
             border: 1px solid #e2e8f0;
+            border-top: 4px solid #0056b3;
             border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+            padding: 16px 18px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
             transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
-        .fundamental-card:hover {
+        .essencial-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0, 86, 179, 0.12);
         }
-        .card-header-flex {
+        .essencial-header {
             display: flex;
-            align-items: center;
-            gap: 12px;
-            border-bottom: 2px solid #f1f5f9;
-            padding-bottom: 12px;
-            margin-bottom: 15px;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 8px;
         }
-        .card-icon {
-            font-size: 24px;
-            background: #f8fafc;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-        }
-        .card-title {
-            margin: 0;
+        .essencial-sigla {
             font-size: 16px;
-            font-weight: 700;
-            color: #0f172a;
-        }
-        .card-subtitle {
-            margin: 2px 0 0 0;
-            font-size: 12px;
-            color: #64748b;
-        }
-        .metric-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .metric-table tr {
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .metric-table tr:last-child {
-            border-bottom: none;
-        }
-        .metric-table td {
-            padding: 10px 0;
-            font-size: 14px;
-        }
-        .metric-label-cell {
-            color: #334155;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .metric-sigla {
-            font-weight: 700;
-            color: #0f172a;
-        }
-        .metric-tooltip {
-            cursor: help;
-            color: #64748b;
-            font-size: 12px;
-            background: #f1f5f9;
-            border-radius: 50%;
-            width: 16px;
-            height: 16px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            user-select: none;
-        }
-        .metric-value-cell {
-            text-align: right;
-            font-weight: 700;
+            font-weight: 800;
             color: #0056b3;
-            font-size: 15px;
-            white-space: nowrap;
+        }
+        .essencial-nome {
+            font-size: 12px;
+            color: #64748b;
+            text-align: right;
+        }
+        .essencial-valor {
+            font-size: 24px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+        .essencial-resumo {
+            font-size: 12px;
+            color: #475569;
+            line-height: 1.4;
+            margin: 0;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 8px;
         }
         .crypto-notice {
             background-color: #f8fafc;
             border: 1px solid #cbd5e1;
-            border-left: 5px solid #64748b;
-            padding: 16px;
+            border-left: 4px solid #64748b;
+            padding: 14px 16px;
             border-radius: 6px;
-            margin: 20px 0 25px 0;
+            margin: 15px 0 20px 0;
             display: flex;
             gap: 12px;
             align-items: center;
             color: #475569;
+            font-size: 14px;
         }
         .academic-footer {
             margin-top: 35px;
@@ -365,7 +322,7 @@
             </div>
         </div>
 
-        <!-- Módulo Fundamentalista (Valuation, Rentabilidade, Liquidez e Dividendos) -->
+        <!-- Raio-X Fundamentalista & Valuation (Essenciais) -->
         <h2>Raio-X Fundamentalista & Valuation</h2>
 
         {% if fundamentalistas and fundamentalistas.disponivel %}
@@ -373,46 +330,28 @@
             <h3 class="company-name">{{ fundamentalistas.nome }}</h3>
             <div class="company-badges">
                 <span class="badge badge-sector">🏢 {{ fundamentalistas.setor }}</span>
-                {% if fundamentalistas.industria and fundamentalistas.industria != 'N/D' %}
-                <span class="badge badge-industry">⚙️ {{ fundamentalistas.industria }}</span>
-                {% endif %}
                 <span class="badge badge-cap">💼 Valor de Mercado: {{ fundamentalistas.valor_mercado }}</span>
             </div>
         </div>
 
-        <div class="fundamental-grid">
-            {% for grupo in fundamentalistas.grupos %}
-            <div class="fundamental-card">
-                <div class="card-header-flex">
-                    <span class="card-icon">{{ grupo.icone }}</span>
-                    <div>
-                        <h4 class="card-title">{{ grupo.titulo }}</h4>
-                        <p class="card-subtitle">{{ grupo.descricao }}</p>
-                    </div>
+        <div class="essenciais-grid">
+            {% for item in fundamentalistas.indicadores %}
+            <div class="essencial-card">
+                <div class="essencial-header">
+                    <span class="essencial-sigla">{{ item.sigla }}</span>
+                    <span class="essencial-nome">{{ item.nome }}</span>
                 </div>
-                <table class="metric-table">
-                    <tbody>
-                        {% for item in grupo.indicadores %}
-                        <tr>
-                            <td class="metric-label-cell">
-                                <span class="metric-sigla">{{ item.sigla }}</span>
-                                <span style="font-size: 13px; color: #475569;">({{ item.nome }})</span>
-                                <span class="metric-tooltip" title="{{ item.desc }}">ⓘ</span>
-                            </td>
-                            <td class="metric-value-cell">{{ item.valor }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <div class="essencial-valor">{{ item.valor }}</div>
+                <p class="essencial-resumo">{{ item.resumo }}</p>
             </div>
             {% endfor %}
         </div>
         {% else %}
         <div class="crypto-notice">
-            <span style="font-size: 24px;">ℹ️</span>
+            <span style="font-size: 22px;">ℹ️</span>
             <div>
-                <strong>Aviso de Categoria do Ativo:</strong>
-                <p style="margin: 4px 0 0 0;">{{ fundamentalistas.mensagem if fundamentalistas else "Indicadores contábeis de balanço patrimonial e valuation não se aplicam a esta categoria de ativo." }}</p>
+                <strong>Aviso:</strong>
+                <p style="margin: 3px 0 0 0;">{{ fundamentalistas.mensagem if fundamentalistas else "Indicadores fundamentalistas contábeis aplicam-se a ações de empresas e não estão disponíveis para este ativo." }}</p>
             </div>
         </div>
         {% endif %}
