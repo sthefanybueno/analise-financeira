@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análise de {{ ticker }}</title>
+    <title>Análise de {{ ticker }} (2 Anos)</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
     <!-- ApexCharts para Gráficos Interativos Dinâmicos -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -270,10 +270,9 @@
         
         <div class="header-bar">
             <a href="/" class="back-button">← Analisar Outro Ativo</a>
-            <span id="indicador-periodo" style="font-size: 14px; color: #64748b;">Período exibido: <strong>6 Meses</strong></span>
         </div>
 
-        <h1>Análise Técnica e Fundamentalista: <strong>{{ ticker }}</strong></h1>
+        <h1>Análise Técnica e Fundamentalista: <strong>{{ ticker }}</strong> (2 Anos)</h1>
 
         <!-- Seletor de Períodos Dinâmicos -->
         <div class="period-selector">
@@ -286,7 +285,7 @@
         <!-- Elemento onde o ApexCharts renderiza o gráfico interativo -->
         <div id="grafico-interativo"></div>
         
-        <h2>Estatísticas Principais da Série Temporal</h2>
+        <h2>Estatísticas Principais da Série Temporal (Últimos 2 Anos)</h2>
         <div class="stats-grid">
             <div class="stat-item">
                 <strong>Último Preço</strong>
@@ -297,27 +296,27 @@
                 <span class="stat-value">R$ {{ estatisticas.media }}</span>
             </div>
             <div class="stat-item">
-                <strong>Mediana</strong>
+                <strong>Mediana (2 Anos)</strong>
                 <span class="stat-value">R$ {{ estatisticas.mediana }}</span>
             </div>
             <div class="stat-item">
-                <strong>Volatilidade (Desvio Padrão)</strong>
+                <strong>Volatilidade / Desvio Padrão (2 Anos)</strong>
                 <span class="stat-value">R$ {{ estatisticas.desvio_padrao }}</span>
             </div>
             <div class="stat-item">
-                <strong>Coeficiente de Variação (CV)</strong>
+                <strong>Coeficiente de Variação - CV (2 Anos)</strong>
                 <span class="stat-value">{{ estatisticas.coeficiente_variacao }}%</span>
             </div>
             <div class="stat-item {% if estatisticas.retorno_total and not estatisticas.retorno_total.startswith('-') %}retorno-positivo{% else %}retorno-negativo{% endif %}">
-                <strong>Retorno no Período</strong>
+                <strong>Retorno no Período (2 Anos)</strong>
                 <span class="stat-value">{{ estatisticas.retorno_total }}%</span>
             </div>
             <div class="stat-item">
-                <strong>Mínima Histórica</strong>
+                <strong>Mínima (2 Anos)</strong>
                 <span class="stat-value">R$ {{ estatisticas.minimo }}</span>
             </div>
             <div class="stat-item">
-                <strong>Máxima Histórica</strong>
+                <strong>Máxima (2 Anos)</strong>
                 <span class="stat-value">R$ {{ estatisticas.maximo }}</span>
             </div>
         </div>
