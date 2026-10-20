@@ -46,7 +46,7 @@ def obter_analise_json(ticker: str):
     Esta é uma rota de API pura. Ela retorna os dados em formato JSON.
     É útil se você quiser que outro programa consuma os dados, em vez de um humano vendo uma página web.
     """
-    stats, explicacao, dados_interativos, ticker_resolvido = gerar_analise(ticker.upper())
+    stats, explicacao, dados_interativos, ticker_resolvido, fundamentalistas = gerar_analise(ticker.upper())
     
     if not stats:
         raise HTTPException(status_code=404, detail=f"Ticker '{ticker}' não encontrado.")
@@ -57,7 +57,8 @@ def obter_analise_json(ticker: str):
         "ticker_analisado": ticker_resolvido,
         "estatisticas": stats_formatado,
         "explicacao_analise": explicacao,
-        "dados_grafico": dados_interativos
+        "dados_grafico": dados_interativos,
+        "indicadores_fundamentalistas": fundamentalistas
     }
 
 
@@ -70,7 +71,7 @@ def gerar_relatorio_web(ticker: str, request: Request):
     """
     print(f"Gerando relatório web para o ticker: {ticker}")
     
-    stats, explicacao, dados_interativos, ticker_resolvido = gerar_analise(ticker.upper())
+    stats, explicacao, dados_interativos, ticker_resolvido, fundamentalistas = gerar_analise(ticker.upper())
 
     if not stats:
         contexto_erro = {
@@ -84,7 +85,8 @@ def gerar_relatorio_web(ticker: str, request: Request):
         "ticker": ticker_resolvido,
         "estatisticas": stats_formatado,
         "explicacao": explicacao,
-        "dados_grafico": dados_interativos
+        "dados_grafico": dados_interativos,
+        "fundamentalistas": fundamentalistas
     }
 
     return render_template("resultado.html", request, contexto_sucesso)
