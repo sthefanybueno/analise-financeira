@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise de {{ ticker }}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
+    <!-- ApexCharts para Gráficos Interativos Dinâmicos -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 950px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        h1, h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #004494;
+        }
+        .tip-banner {
+            background-color: #e9f5ff;
+            border-left: 4px solid #0056b3;
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #004494;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .period-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .period-btn {
+            background-color: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .period-btn:hover {
+            background-color: #e2e8f0;
+            border-color: #94a3b8;
+        }
+        .period-btn.active {
+            background-color: #0056b3;
+            color: white;
+            border-color: #0056b3;
+            box-shadow: 0 2px 4px rgba(0, 86, 179, 0.25);
+        }
+        #grafico-interativo {
+            min-height: 440px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            margin-bottom: 25px;
+        }
+        .stat-item {
+            background-color: #e9f5ff;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 5px solid #0056b3;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .stat-item strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 14px;
+        }
+        .stat-item .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0056b3;
+        }
+        .explanation-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #0056b3;
+            border-radius: 6px;
+            padding: 20px;
+            line-height: 1.8;
+            white-space: pre-wrap; /* Mantém todas as quebras de linha e parágrafos da explicação */
+            color: #333;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div class="header-bar">
+            <a href="/" class="back-button">← Analisar Outro Ativo</a>
+            <span id="indicador-periodo" style="font-size: 14px; color: #64748b;">Período exibido: <strong>6 Meses</strong></span>
+        </div>
+
+        <h1>Análise Técnica para <strong>{{ ticker }}</strong></h1>
+
+        <!-- Seletor de Períodos Dinâmicos -->
+        <div class="period-selector">
+            <span style="font-weight: bold; font-size: 14px; color: #475569;">📅 Período:</span>
+            <button type="button" class="period-btn active" data-period="6m">6 Meses</button>
+            <button type="button" class="period-btn" data-period="1y">1 Ano</button>
+            <button type="button" class="period-btn" data-period="2y">2 Anos (Completo)</button>
+        </div>
+
+        <!-- Elemento onde o ApexCharts renderiza o gráfico interativo -->
+        <div id="grafico-interativo"></div>
+        
+        <h2>Estatísticas Principais</h2>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <strong>Último Preço</strong>
+                <span class="stat-value">R$ {{ estatisticas.ultimo_valor }}</span>
+            </div>
+            <div class="stat-item">
+                <strong>Preço Médio</strong>
+                <span class="stat-value">R$ {{ estatisticas.media }}</span>
+            </div>
+            <div class="stat-item">
+                <strong>Preço Máximo</strong>
+                <span class="stat-value">R$ {{ estatisticas.maximo }}</span>
+            </div>
+            <div class="stat-item">
+                <strong>Preço Mínimo</strong>
+                <span class="stat-value">R$ {{ estatisticas.minimo }}</span>
+            </div>
+            <div class="stat-item">
+                <strong>Mediana</strong>
+                <span class="stat-value">R$ {{ estatisticas.mediana }}</span>
+            </div>
+            <div class="stat-item">
+                <strong>Volatilidade (Desvio Padrão)</strong>
+                <span class="stat-value">R$ {{ estatisticas.desvio_padrao }}</span>
+            </div>
+        </div>
+
+        <h2>Explicação da Análise</h2>
+        <div class="explanation-box">{{ explicacao }}</div>
+
+    </div>
+
+    <!-- Dados do Gráfico injetados pelo backend -->
+    <script id="dados-grafico-data" type="application/json">
+        {{ dados_grafico | tojson }}
+    </script>
+
+    <!-- Script de Configuração do Gráfico Interativo -->
+    <script>
+        const dadosBackend = JSON.parse(document.getElementById('dados-grafico-data').textContent);
+
+        if (dadosBackend && dadosBackend.serie_preco && dadosBackend.serie_preco.length > 0) {
+            const options = {
+                series: [
+                    {
+                        name: 'Preço de Fechamento',
+                        data: dadosBackend.serie_preco
+                    },
+                    {
+                        name: 'MMS 20 (Média Móvel)',
+                        data: dadosBackend.serie_mms20
+                    }
+                ],
+                chart: {
+                    type: 'line',
+                    height: 440,
+                    fontFamily: 'Arial, sans-serif',
+                    zoom: {
+                        enabled: true,
+                        type: 'x',
+                        autoScaleYaxis: true
+                    },
+                    toolbar: {
+                        autoSelected: 'zoom',
+                        tools: {
+                            download: true,
+                            selection: true,
+                            zoom: true,
+                            zoomin: true,
+                            zoomout: true,
+                            pan: true,
+                            reset: true
+                        }
+                    }
+                },
+                colors: ['#0056b3', '#dc3545'], // Linha Azul para o Preço de Fechamento, Vermelha para MMS20
+                stroke: {
+                    curve: 'straight',
+                    width: [2.5, 2]
+                },
+                title: {
+                    text: 'Análise Estatística de Preços Interativa - {{ ticker }}',
+                    align: 'left',
+                    style: {
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        color: '#0056b3'
+                    }
+                },
+                grid: {
+                    borderColor: '#e2e8f0',
+                    row: {
+                        colors: ['#f8fafc', 'transparent'],
+                        opacity: 0.5
+                    }
+                },
+                xaxis: {
+                    type: 'datetime',
+                    labels: {
+                        datetimeUTC: false,
+                        format: 'dd/MM/yyyy', // Formato de exibição com Dia / Mês / Ano
+                        style: {
+                            colors: '#64748b'
+                        }
+                    },
+                    title: {
+                        text: 'Data (Dia / Mês / Ano)',
+                        style: {
+                            color: '#64748b',
+                            fontWeight: 600
+                        }
+                    }
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function(val) {
+                            return 'R$ ' + Number(val).toFixed(2);
+                        },
+                        style: {
+                            colors: '#64748b'
+                        }
+                    },
+                    title: {
+                        text: 'Preço (R$)',
+                        style: {
+                            color: '#64748b',
+                            fontWeight: 600
+                        }
+                    }
+                },
+                tooltip: {
+                    shared: true,
+                    x: {
+                        format: 'dd/MM/yyyy' // Tooltip exibe a data completa com o ano
+                    },
+                    y: {
+                        formatter: function(val) {
+                            return val !== null && val !== undefined ? 'R$ ' + Number(val).toFixed(2) : '-';
+                        }
+                    }
+                },
+                annotations: {
+                    yaxis: [
+                        {
+                            y: dadosBackend.mediana,
+                            borderColor: '#FFA500',
+                            strokeDashArray: 4,
+                            label: {
+                                borderColor: '#FFA500',
+                                style: { color: '#fff', background: '#FFA500', fontSize: '11px', fontWeight: 600 },
+                                text: 'Mediana: R$ ' + Number(dadosBackend.mediana).toFixed(2)
+                            }
+                        },
+                        {
+                            y: dadosBackend.dp_pos1,
+                            borderColor: '#28A745',
+                            strokeDashArray: 3,
+                            label: {
+                                borderColor: '#28A745',
+                                style: { color: '#fff', background: '#28A745', fontSize: '10px' },
+                                text: '+1 DP: R$ ' + Number(dadosBackend.dp_pos1).toFixed(2)
+                            }
+                        },
+                        {
+                            y: dadosBackend.dp_neg1,
+                            borderColor: '#28A745',
+                            strokeDashArray: 3,
+                            label: {
+                                borderColor: '#28A745',
+                                style: { color: '#fff', background: '#28A745', fontSize: '10px' },
+                                text: '-1 DP: R$ ' + Number(dadosBackend.dp_neg1).toFixed(2)
+                            }
+                        },
+                        {
+                            y: dadosBackend.dp_pos2,
+                            borderColor: '#6f42c1',
+                            strokeDashArray: 3,
+                            label: {
+                                borderColor: '#6f42c1',
+                                style: { color: '#fff', background: '#6f42c1', fontSize: '10px' },
+                                text: '+2 DP: R$ ' + Number(dadosBackend.dp_pos2).toFixed(2)
+                            }
+                        },
+                        {
+                            y: dadosBackend.dp_neg2,
+                            borderColor: '#6f42c1',
+                            strokeDashArray: 3,
+                            label: {
+                                borderColor: '#6f42c1',
+                                style: { color: '#fff', background: '#6f42c1', fontSize: '10px' },
+                                text: '-2 DP: R$ ' + Number(dadosBackend.dp_neg2).toFixed(2)
+                            }
+                        },
+                        {
+                            y: dadosBackend.dp_pos3,
+                            borderColor: '#17A2B8',
+                            strokeDashArray: 3,
+                            label: {
+                                borderColor: '#17A2B8',
+                                style: { color: '#fff', background: '#17A2B8', fontSize: '10px' },
+                                text: '+3 DP: R$ ' + Number(dadosBackend.dp_pos3).toFixed(2)
+                            }
+                        },
+                        {
+                            y: dadosBackend.dp_neg3,
+                            borderColor: '#17A2B8',
+                            strokeDashArray: 3,
+                            label: {
+                                borderColor: '#17A2B8',
+                                style: { color: '#fff', background: '#17A2B8', fontSize: '10px' },
+                                text: '-3 DP: R$ ' + Number(dadosBackend.dp_neg3).toFixed(2)
+                            }
+                        }
+                    ]
+                },
+                legend: {
+                    position: 'top',
+                    horizontalAlign: 'right',
+                    fontSize: '13px',
+                    markers: {
+                        radius: 12
+                    }
+                }
+            };
+
+            const chart = new ApexCharts(document.querySelector("#grafico-interativo"), options);
+            
+            const totalPontos = dadosBackend.serie_preco.length;
+            const ultimoTimestamp = dadosBackend.serie_preco[totalPontos - 1][0];
+            const primeiroTimestamp = dadosBackend.serie_preco[0][0];
+
+            function aplicarPeriodo(periodo) {
+                let dataInicio;
+                const umDiaMs = 24 * 60 * 60 * 1000;
+                const indicador = document.getElementById('indicador-periodo');
+
+                if (periodo === '6m') {
+                    dataInicio = ultimoTimestamp - (180 * umDiaMs);
+                } else if (periodo === '1y') {
+                    dataInicio = ultimoTimestamp - (365 * umDiaMs);
+                } else if (periodo === '2y') {
+                    dataInicio = primeiroTimestamp;
+                }
+
+                if (dataInicio < primeiroTimestamp) {
+                    dataInicio = primeiroTimestamp;
+                }
+
+                chart.zoomX(dataInicio, ultimoTimestamp);
+            }
+
+            chart.render().then(() => {
+                // Inicia visualizando os últimos 6 meses
+                aplicarPeriodo('6m');
+            });
+
+            // Adicionar evento aos botões de período
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    const periodo = this.getAttribute('data-period');
+                    aplicarPeriodo(periodo);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
